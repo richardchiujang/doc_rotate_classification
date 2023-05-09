@@ -1,0 +1,31 @@
+name: ClassNet
+arch:
+  type: Model
+  backbone:
+    type: resnet18
+    pretrained: true
+  neck:
+    type: FPN
+    inner_channels: 256
+  head:
+    type: ClassHead
+    out_channels: 4
+optimizer:
+  type: Adam
+  args:
+    lr: 0.001
+    weight_decay: 0
+    amsgrad: true
+lr_scheduler:
+  type: WarmupPolyLR
+  args:
+    warmup_epoch: 3
+trainer:
+  seed: 2
+  epochs: 1
+  log_iter: 1
+  show_images_iter: 500
+  resume_checkpoint: ''
+  finetune_checkpoint: ''
+  output_dir: output
+
