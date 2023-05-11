@@ -28,13 +28,16 @@ def main(config):
 
     #load the train and valid data
     train_dataset = ImageFolder(train_data_dir,transform = transforms.Compose([
-        transforms.Resize((224,224)),transforms.ToTensor()
+        transforms.Resize((224,224)),
+        transforms.ToTensor(),
     ]))
     valid_dataset = ImageFolder(valid_data_dir,transform = transforms.Compose([
-        transforms.Resize((224,224)),transforms.ToTensor()
+        transforms.Resize((224,224)),
+        transforms.ToTensor(),
     ]))
     test_dataset = ImageFolder(test_data_dir,transforms.Compose([
-        transforms.Resize((224,224)),transforms.ToTensor()
+        transforms.Resize((224,224)),
+        transforms.ToTensor(),
     ]))
 
     from torch.utils.data.dataloader import DataLoader
