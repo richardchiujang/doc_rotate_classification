@@ -4,7 +4,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from models.basic import ConvBnRelu
+from drcmodels.basic import ConvBnRelu
 
 
 class FPN(nn.Module):

@@ -5,8 +5,8 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import anyconfig
 import numpy as np
-import torch
-import torchvision
+# import torch
+# import torchvision
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
@@ -19,25 +19,25 @@ def init_args():
 
 def main(config):
     import torch
-    from models import build_model
+    from drcmodels import build_model
 
     #train and test data directory
     train_data_dir = "datasets/train"
     valid_data_dir = "datasets/valid"
-    test_data_dir = "datasets/test"
+    test_data_dir = "datasets/test" 
 
     #load the train and valid data
     train_dataset = ImageFolder(train_data_dir,transform = transforms.Compose([
         transforms.Resize((224,224)),
-        transforms.ToTensor(),
+        transforms.ToTensor(),     # 转换成形状为[C,H,W]，取值范围是[0,1.0]的torch.FloadTensor
     ]))
     valid_dataset = ImageFolder(valid_data_dir,transform = transforms.Compose([
         transforms.Resize((224,224)),
-        transforms.ToTensor(),
+        transforms.ToTensor(),     # 转换成形状为[C,H,W]，取值范围是[0,1.0]的torch.FloadTensor
     ]))
     test_dataset = ImageFolder(test_data_dir,transforms.Compose([
         transforms.Resize((224,224)),
-        transforms.ToTensor(),
+        transforms.ToTensor(),     # 转换成形状为[C,H,W]，取值范围是[0,1.0]的torch.FloadTensor
     ]))
 
     from torch.utils.data.dataloader import DataLoader
@@ -69,9 +69,9 @@ def main(config):
 
     config['arch']['backbone']['in_channels'] = 3 # if config['dataset']['train']['dataset']['args']['img_mode'] != 'GRAY' else 1
     model = build_model(config['arch'])
-    checkpoint = torch.load('model.pth')
-    model.load_state_dict(checkpoint)
-    print('load model.pth')
+    # checkpoint = torch.load('model.pth')
+    # model.load_state_dict(checkpoint)
+    # print('load model.pth')
     model = model.to(device)
 
     # print(model)

@@ -4,9 +4,9 @@ from addict import Dict
 from torch import nn
 import torch.nn.functional as F
 
-from models.backbone import build_backbone
-from models.neck import build_neck
-from models.head import build_head
+from drcmodels.backbone import build_backbone
+from drcmodels.neck import build_neck
+from drcmodels.head import build_head
 
 
 class Model(nn.Module):

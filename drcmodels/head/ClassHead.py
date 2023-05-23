@@ -14,11 +14,11 @@ class ClassHead(nn.Module):
             nn.BatchNorm2d(self.mid_channels),
             nn.ReLU(inplace=True),
             nn.Flatten(),
-            nn.Linear(self.mid_channels * 56 * 56, 1024),
+            nn.Linear(self.mid_channels * 56 * 56, 30),
             nn.ReLU(),
-            nn.Linear(1024, 512),
+            nn.Linear(30, 10),
             nn.ReLU(),
-            nn.Linear(512, self.out_channels),
+            nn.Linear(10, self.out_channels),
         )
 
     def forward(self, x):
