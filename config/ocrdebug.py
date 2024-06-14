@@ -1,0 +1,3 @@
+
+global ocrdebug
+ocrdebug=False

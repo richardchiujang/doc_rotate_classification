@@ -11,11 +11,11 @@ arch:
     type: ClassHead
     out_channels: 4
 trainer:
-  seed: 2
-  epochs: 3
+  seed: 29
+  epochs: 100
   log_iter: 1
   show_images_iter: 500
-  resume_checkpoint: ''
-  finetune_checkpoint: ''
+  resume_checkpoint: 'model.pth'   #'model.pth'
+  finetune_checkpoint: ''    #'model.pth'
   output_dir: output
 

@@ -27,29 +27,30 @@ def main(config):
     test_data_dir = "datasets/test" 
 
     #load the train and valid data
+    sz = 224
     train_dataset = ImageFolder(train_data_dir,transform = transforms.Compose([
-        transforms.Resize((224,224)),
+        transforms.Resize((sz,sz)),
         transforms.ToTensor(),     # 转换成形状为[C,H,W]，取值范围是[0,1.0]的torch.FloadTensor
     ]))
     valid_dataset = ImageFolder(valid_data_dir,transform = transforms.Compose([
-        transforms.Resize((224,224)),
+        transforms.Resize((sz,sz)),
         transforms.ToTensor(),     # 转换成形状为[C,H,W]，取值范围是[0,1.0]的torch.FloadTensor
     ]))
     test_dataset = ImageFolder(test_data_dir,transforms.Compose([
-        transforms.Resize((224,224)),
+        transforms.Resize((sz,sz)),
         transforms.ToTensor(),     # 转换成形状为[C,H,W]，取值范围是[0,1.0]的torch.FloadTensor
     ]))
 
     from torch.utils.data.dataloader import DataLoader
     # from torch.utils.data import random_split
 
-    batch_size = 256
+    batch_size = 128
     # val_size = 
     # train_size = len(dataset) - val_size 
     # train_data,val_data = random_split(dataset,[train_size,val_size])
-    train_loader = DataLoader(train_dataset,batch_size,shuffle = True,num_workers = 10,pin_memory = True)
-    validate_loader = DataLoader(valid_dataset,batch_size*2,num_workers = 10,pin_memory = True) 
-    test_loader = DataLoader(test_dataset,batch_size*2,num_workers = 10,pin_memory = True) 
+    train_loader = DataLoader(train_dataset,batch_size,shuffle = True,num_workers = 2,pin_memory = False)
+    validate_loader = DataLoader(valid_dataset,batch_size*2,num_workers = 2,pin_memory = False) 
+    test_loader = DataLoader(test_dataset,batch_size*2,num_workers = 2,pin_memory = False) 
     print(f"Length of Train Data : {len(train_dataset)}")
     print(f"Length of Validation Data : {len(valid_dataset)}")
     print(f"Length of Test Data : {len(test_dataset)}")
@@ -69,13 +70,13 @@ def main(config):
 
     config['arch']['backbone']['in_channels'] = 3 # if config['dataset']['train']['dataset']['args']['img_mode'] != 'GRAY' else 1
     model = build_model(config['arch'])
-    # checkpoint = torch.load('model.pth')
-    # model.load_state_dict(checkpoint)
-    # print('load model.pth')
+    checkpoint = torch.load('model.pth')
+    model.load_state_dict(checkpoint)
+    print('load model.pth')
     model = model.to(device)
 
     # print(model)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
     # model.train()
     train_loss_list = []
     train_acc_list = []
@@ -118,7 +119,8 @@ def main(config):
             if np.mean(epoch_acc) > best_acc:
                 best_acc = np.mean(epoch_acc)
                 print('save model.pth', np.mean(epoch_loss), np.mean(epoch_acc))
-                torch.save(model.state_dict(), 'model.pth')
+                torch.save(model.state_dict(), 'output\model.pth')
+                torch.save(model.state_dict(), f'output\model {epoch} {np.mean(epoch_loss):.6f} {np.mean(epoch_acc):.6f}.pth')
         print(f'validation:   Loss: {np.mean(epoch_loss):.6f}' + f'  Accuracy: {np.mean(epoch_acc):.6f}')
 
     # model test phase
