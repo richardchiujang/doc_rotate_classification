@@ -70,13 +70,13 @@ def main(config):
 
     config['arch']['backbone']['in_channels'] = 3 # if config['dataset']['train']['dataset']['args']['img_mode'] != 'GRAY' else 1
     model = build_model(config['arch'])
-    checkpoint = torch.load('model.pth')
+    checkpoint = torch.load(config['trainer']['resume_checkpoint'], map_location=device)
     model.load_state_dict(checkpoint)
-    print('load model.pth')
+    print('load model.pth', config['trainer']['resume_checkpoint'])
     model = model.to(device)
 
-    # print(model)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.00001)
+    print('lr:', config['trainer']['lr'])
+    optimizer = torch.optim.Adam(model.parameters(), lr=config['trainer']['lr'], weight_decay=config['trainer']['weight_decay'])
     # model.train()
     train_loss_list = []
     train_acc_list = []
@@ -118,7 +118,7 @@ def main(config):
                 epoch_acc.append(acc.item())
             if np.mean(epoch_acc) > best_acc:
                 best_acc = np.mean(epoch_acc)
-                print('save model.pth', np.mean(epoch_loss), np.mean(epoch_acc))
+                print('save output\model.pth', np.mean(epoch_loss), np.mean(epoch_acc))
                 torch.save(model.state_dict(), 'output\model.pth')
                 torch.save(model.state_dict(), f'output\model {epoch} {np.mean(epoch_loss):.6f} {np.mean(epoch_acc):.6f}.pth')
         print(f'validation:   Loss: {np.mean(epoch_loss):.6f}' + f'  Accuracy: {np.mean(epoch_acc):.6f}')
