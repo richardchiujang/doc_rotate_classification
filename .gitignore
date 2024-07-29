@@ -16,3 +16,4 @@ datasets/
 input_o/
 temp/
 work/*
+datasets*
