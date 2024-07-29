@@ -82,7 +82,7 @@ def main(config):
     train_acc_list = []
     validate_loss_list = []
     validate_acc_list = []    
-    best_acc = 0.0
+    best_acc = 0.5
     for epoch in range(1, config['trainer']['epochs'] + 1):
         model.train()
         for batch_idx, (data, target) in enumerate(train_loader):
@@ -119,8 +119,8 @@ def main(config):
             if np.mean(epoch_acc) > best_acc:
                 best_acc = np.mean(epoch_acc)
                 print('save output\model.pth', np.mean(epoch_loss), np.mean(epoch_acc))
-                torch.save(model.state_dict(), 'output\model.pth')
-                torch.save(model.state_dict(), f'output\model {epoch} {np.mean(epoch_loss):.6f} {np.mean(epoch_acc):.6f}.pth')
+                torch.save(model.state_dict(), 'output\drc_model_latest.pth')
+                torch.save(model.state_dict(), f'output\drc_model_e{epoch}_loss{np.mean(epoch_loss):.6f}_acc{np.mean(epoch_acc):.6f}.pth')
         print(f'validation:   Loss: {np.mean(epoch_loss):.6f}' + f'  Accuracy: {np.mean(epoch_acc):.6f}')
 
     # model test phase
